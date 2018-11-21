@@ -22,7 +22,7 @@ void App::computeMVC(std::string fileMesh, std::string fileCage)
     std::vector <std::vector<double> > mvc;
     mesh = Trimesh(fileMesh.c_str());
 
-    Cage cage = Cage(fileCage.c_str());
+    cage = Cage(fileCage.c_str());
 
     //return cage.vector_coords();
 
@@ -48,5 +48,44 @@ std::vector<double> App::deformGreen(std::vector<double> cageC)
 {
     Cage deformed_cage = Cage(cageC,cage.vector_triangles());
     greenCoords.deform(deformed_cage);
-    greenCoords.getDeformedMesh();
+    return greenCoords.getDeformedMesh();
+}
+
+std::vector<double> App::getCoords4cageV(int id_cv, int baryMode)
+{
+    std::vector<std::vector<double> > coords;
+    if(baryMode==MVC_COORDS)
+    {
+         coords = mvcCoords.getCoords();
+    }
+    else if(baryMode==GREEN_COORDS)
+    {
+        coords = greenCoords.getCoords();
+    }
+    std::vector<double> influence;
+    for(int i=0; i<coords.size(); i++)
+    {
+        influence.push_back(coords[i][id_cv]);
+    }
+    return influence;
+}
+
+std::vector<double> App::debugMC()
+{
+    return mesh.vector_coords();
+}
+
+std::vector<int> App::debugMT()
+{
+    return mesh.vector_triangles();
+}
+
+std::vector<double> App::debugCC()
+{
+    return cage.vector_coords();
+}
+
+std::vector<int> App::debugCT()
+{
+    return cage.vector_triangles();
 }

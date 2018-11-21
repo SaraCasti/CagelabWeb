@@ -11,7 +11,12 @@ EMSCRIPTEN_BINDINGS(Cagelab) {
         .function("deformMVC", &App::deformMVC)
         .function("deformGreen", &App::deformGreen)
         .function("computeMVC", &App::computeMVC)
+        .function("getCoords4cageV", &App::getCoords4cageV)
         .function("test", &App::test)
+        .function("debugMC", &App::debugMC)
+        .function("debugMT", &App::debugMT)
+        .function("debugCC", &App::debugCC)
+        .function("debugCT", &App::debugCT)
         ;
 
     class_<Trimesh>("Trimesh")
@@ -21,5 +26,10 @@ EMSCRIPTEN_BINDINGS(Cagelab) {
 
     register_vector<double>("vector<double>");
     register_vector<int>("vector<int>");
+    enum_<BarycentricMode>("BarycentricMode")
+            .value("NONE_COORDS", NONE_COORDS)
+            .value("GREEN_COORDS", GREEN_COORDS)
+            .value("MVC_COORDS", MVC_COORDS)
+            ;
 }
 #endif

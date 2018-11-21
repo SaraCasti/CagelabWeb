@@ -19,6 +19,11 @@ public:
     int test(int b);
     std::vector<double> deformMVC(std::vector<double> cageC);
     std::vector<double> deformGreen(std::vector<double> cageC);
+    std::vector<double> getCoords4cageV(int id_cv, int baryMode);
+    std::vector<double> debugMC();
+    std::vector<int> debugMT();
+    std::vector<double> debugCC();
+    std::vector<int> debugCT();
 
      //std::vector< std::vector<double> > computeMVC(const char* meshfile, const char* cagefile);
      // std::vector<double> meshCoords, std::vector<int> meshFaces

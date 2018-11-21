@@ -31,5 +31,7 @@ int main(int argc, char *argv[])
     string cageF = "/Users/Sary/Documents/CageLab_Internato/models_and_cages/armadillo_cage.obj";
     a.computeMVC(meshF, cageF);
 
+    std::cout << a.debugMT().size() << endl;
+
     return 0;
 }
