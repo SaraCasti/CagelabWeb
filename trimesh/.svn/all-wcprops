@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/cinolib/!svn/ver/37/CinoLib/trimesh
+END
+trimesh.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/cinolib/!svn/ver/60/CinoLib/trimesh/trimesh.h
+END
+drawable_trimesh.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/cinolib/!svn/ver/58/CinoLib/trimesh/drawable_trimesh.h
+END
+pca.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/cinolib/!svn/ver/58/CinoLib/trimesh/pca.cpp
+END
+load_save_trimesh.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/cinolib/!svn/ver/58/CinoLib/trimesh/load_save_trimesh.cpp
+END
+pca.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/cinolib/!svn/ver/58/CinoLib/trimesh/pca.h
+END
+trimesh.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/cinolib/!svn/ver/17/CinoLib/trimesh/trimesh.cpp
+END
+drawable_trimesh.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/cinolib/!svn/ver/58/CinoLib/trimesh/drawable_trimesh.cpp
+END
+load_save_trimesh.h
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/cinolib/!svn/ver/58/CinoLib/trimesh/load_save_trimesh.h
+END

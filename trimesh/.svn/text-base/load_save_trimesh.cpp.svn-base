@@ -1,0 +1,112 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#include "load_save_trimesh.h"
+
+#include <iostream>
+
+using namespace std;
+
+int read_point_id(char *s)
+{
+    int pos = 0;
+    while(s[pos] != '\0')
+    {
+        if(s[pos] == '/')
+        {
+            s[pos] = ' ';
+        }
+        ++pos;
+    }
+    sscanf(s, "%d", &pos);
+    return pos-1;
+}
+
+
+void load_OBJ(const char     * filename,
+              vector<double> & xyz,
+              vector<int>    & tri)
+{
+    FILE *fp = fopen(filename, "r");
+
+    if(!fp)
+    {
+        cerr << "ERROR : " << __FILE__ << ", line " << __LINE__ << " : load_OBJ() : couldn't open input file " << filename << endl;
+        exit(-1);
+    }
+
+    char line[1024],
+          s0[1024],
+          s1[1024],
+          s2[1024];
+
+    while(fgets(line, 1024, fp))
+    {
+        switch(line[0])
+        {
+            case 'v':
+
+                if(!isspace(line[1])) continue;
+                if(line[1] != 't' && line[1] != 'n' )
+                {
+                    double x, y, z;
+                    sscanf( line, "%*c%lf%lf%lf", &x, &y, &z );
+                    xyz.push_back(x);
+                    xyz.push_back(y);
+                    xyz.push_back(z);
+                }
+                break;
+
+            case 'f':
+                sscanf(line, "%*c%s%s%s", s0, s1, s2);
+                tri.push_back(read_point_id(s0));
+                tri.push_back(read_point_id(s1));
+                tri.push_back(read_point_id(s2));
+                break;
+        }
+    }
+    fclose(fp);
+}
+
+
+void load_OFF(const char     * filename,
+              vector<double> & xyz,
+              vector<int>    & tri)
+{
+    FILE *fp = fopen(filename, "r");
+
+    if(!fp)
+    {
+        cerr << "ERROR : " << __FILE__ << ", line " << __LINE__ << " : load_OFF() : couldn't open input file " << filename << endl;
+        exit(-1);
+    }
+
+    int nv, nt, dummy;
+
+    fscanf(fp, "OFF\n");
+    fscanf(fp, "%d %d %d\n", &nv, &nt, &dummy);
+
+    for(int i=0; i<nv; ++i)
+    {
+        double x, y, z;
+        fscanf(fp, "%lf %lf %lf\n", &x, &y, &z);
+        xyz.push_back(x);
+        xyz.push_back(y);
+        xyz.push_back(z);
+    }
+
+    cout << endl;
+
+    for(int i=0; i<nt; ++i)
+    {
+        int v0, v1, v2;
+        fscanf(fp, "%*d %d %d %d\n", &v0, &v1, &v2);
+        tri.push_back(v0);
+        tri.push_back(v1);
+        tri.push_back(v2);
+    }
+
+    fclose(fp);
+}

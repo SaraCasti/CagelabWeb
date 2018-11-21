@@ -1,0 +1,97 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#include "pca.h"
+
+#include "vec3.h"
+
+#ifdef USE_VCG
+#include <vcg/space/point3.h>
+#include <vcg/math/matrix33.h>
+#include <vcg/math/lin_algebra.h>
+#endif
+
+
+void PCA(std::vector<double> & coords)
+{
+#ifdef USE_VCG
+    using namespace vcg;
+
+    Matrix33d covmat, A;
+    covmat.SetZero();
+
+    for(int i=0; i<(int)coords.size(); i+=3)
+    {
+        Point3d p(coords[i+0],
+                  coords[i+1],
+                  coords[i+2]);
+
+        A.OuterProduct(p,p);
+        covmat += A;
+    }
+
+    Matrix33d eigenvectors;
+    Point3d   eigenvalues;
+    int       iterations;
+
+    Jacobi<Matrix33d,Point3d>(covmat, eigenvalues, eigenvectors, iterations);
+    SortEigenvaluesAndEigenvectors<Matrix33d,Point3d>(eigenvalues, eigenvectors);
+
+    // move the less important eigenvector in order to overlap Z-axis
+    //
+    Point3d stdZ(0,0,1);
+    Point3d newZ(eigenvectors[0][2],eigenvectors[1][2],eigenvectors[2][2]);
+
+    Point3d axis = newZ ^ stdZ;
+    double alpha = Angle(newZ, stdZ);
+
+    Matrix44d tz;
+    tz.SetRotateRad(alpha, axis);
+
+
+    // moves the second less important eigenvector in order to overlap X-axis
+    //
+    Point3d stdX(1,0,0);
+    Point3d newX = tz * Point3d(eigenvectors[0][1], eigenvectors[1][1], eigenvectors[2][1]);
+
+    axis  = newX ^ stdX;
+    alpha = Angle(newX, stdX);
+
+    Matrix44d tx;
+    tx.SetRotateRad(alpha, axis);
+
+    //
+    // rotate the mesh according to the PCA
+    //
+
+    Matrix44d T = tx * tz;
+
+    double m[3][3] =
+    {
+        { T[0][0], T[0][1], T[0][2] } ,
+        { T[1][0], T[1][1], T[1][2] } ,
+        { T[2][0], T[2][1], T[2][2] }
+    };
+
+    for(int i=0; i<(int)coords.size(); i+=3)
+    {
+        vec3d p(coords[i+0],
+                coords[i+1],
+                coords[i+2]);
+
+        rotate(p, m);
+
+        coords[i+0] = p.x();
+        coords[i+1] = p.y();
+        coords[i+2] = p.z();
+    }
+
+#else
+
+    cerr << "WARNING : " << __FILE__ << ", line " << __LINE__ << " : align_to_PCA() : VCG Library not supported! Recompile with -DUSE_VCG" << endl;
+
+#endif
+}
+

@@ -1,0 +1,13 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#ifndef PCA_H
+#define PCA_H
+
+#include <vector>
+
+void PCA(std::vector<double> & coords);
+
+#endif // PCA_H

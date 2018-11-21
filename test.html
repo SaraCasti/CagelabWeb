@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<script>
+    var Module = {
+      onRuntimeInitialized: function() {
+        var app = new Module.App();
+        var res = app.test(2);
+        var mesh = "meshes/armadillo.obj";
+        var cage = "meshes/armadillo_cage.obj";
+        var test = app.computeMVC(mesh,cage);
+      }
+    };
+  </script>
+  <script src="./generated/cagelab_asm.js"></script>  
+</html>

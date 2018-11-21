@@ -1,0 +1,89 @@
+/**
+ @author    Marco Livesu (marco.livesu@gmail.com)
+ @copyright Marco Livesu 2014.
+*/
+
+#ifndef DRAWABLE_TRIMESH_H
+#define DRAWABLE_TRIMESH_H
+
+#include <vector>
+
+#include "drawable_object.h"
+#include "trimesh.h"
+
+using namespace std;
+
+class DrawableTrimesh : public Trimesh<double> , public DrawableObject
+{
+    public:
+
+        enum
+        {
+            DRAW_MESH        = 0x00000001,
+            DRAW_POINTS      = 0x00000010,
+            DRAW_FLAT        = 0x00000100,
+            DRAW_SMOOTH      = 0x00001000,
+            DRAW_WIREFRAME   = 0x00010000,
+            DRAW_FACECOLOR   = 0x00100000,
+            DRAW_VERTEXCOLOR = 0x01000000
+        };
+
+        DrawableTrimesh();
+        DrawableTrimesh(const char *filename);
+
+        void init();
+        void clear();
+
+        // Implementation of the
+        // DrawableObject interface
+        //
+        void  draw()         const;
+        vec3d scene_center() const;
+        float scene_radius() const;
+
+        // rendering options
+        //
+        void set_draw_mesh(bool b);
+        void set_wireframe(bool b);
+        void set_flat_shading();
+        void set_smooth_shading();
+        void set_points_shading();
+        void set_wireframe_color(float r, float g, float b);
+        void set_wireframe_width(float width);
+        void set_enable_vertex_color();
+        void set_enable_triangle_color();
+        void set_v_color(float r, float g, float b);
+        void set_t_color(float r, float g, float b);
+
+        inline const float * vertex_color  (int vid) const { return &(v_colors[vid*3]); }
+        inline const float * triangle_color(int tid) const { return &(t_colors[tid*3]); }
+
+        inline void set_vertex_color(int vid, float * color)
+        {
+            int vid_ptr = vid * 3;
+            v_colors[vid_ptr + 0] = color[0];
+            v_colors[vid_ptr + 1] = color[1];
+            v_colors[vid_ptr + 2] = color[2];
+        }
+
+        inline void set_triangle_color(int tid, float * color)
+        {
+            int tid_ptr = tid * 3;
+            t_colors[tid_ptr + 0] = color[0];
+            t_colors[tid_ptr + 1] = color[1];
+            t_colors[tid_ptr + 2] = color[2];
+        }
+
+    protected:
+
+        void render_pass() const;
+
+        int   draw_mode;
+        int   wireframe_width;
+        float wireframe_color[3];
+
+        vector<float> v_colors;
+        vector<float> t_colors;
+};
+
+#endif // DRAWABLE_TRIMESH_H

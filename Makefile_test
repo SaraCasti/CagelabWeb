@@ -1,0 +1,37 @@
+CC=g++
+# A few notes on the options:
+#
+# -s PRECISE_F32=1 is needed because of a strange bug involving the assignments 
+#           of floats. Actually asm.js uses doubles for most computation, 
+#           this flags ensure a behavoiur more similar to the expected one.
+# --bind    needed for exporting the functions from cpp to js.
+# -s DEMANGLE_SUPPORT=1 More consistent naming of the cpp functions is preserved 
+#           in asm.js. Useful for cpp stacktrace inside the browser. 
+# Reasonable memory options: 
+# 
+# -s ALLOW_MEMORY_GROWTH=1 
+# -s TOTAL_MEMORY=536870912
+# -s TOTAL_MEMORY=1073741824 
+
+
+CFLAGS= -I. 
+
+OBJ =  app.o \
+        cagelab_js.o \
+		trimesh/load_save_trimesh.o \
+		coordinates/meanvalue.o \
+		coordinates/green.o \
+		cage/cage.o
+
+DEPS = coordinates/BarycentricCoordinates.h \
+       app.h \
+	   coordinates/meanvalue.h \
+	   coordinates/green.h \
+	   trimesh/trimesh.h \
+	   cage/cage.h 
+
+%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+test: main.cpp $(OBJ)
+	$(CC) -o test/$@ $^ $(CFLAGS)
