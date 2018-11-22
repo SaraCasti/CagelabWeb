@@ -7,7 +7,7 @@ using namespace emscripten;
 EMSCRIPTEN_BINDINGS(Cagelab) {
     class_<App>("App")
         .constructor<>()
-        .function("compute_coords", &App::computeCoords)
+        .function("compute_coords", &App::computeCoords, allow_raw_pointers())
         .function("deformMVC", &App::deformMVC)
         .function("deformGreen", &App::deformGreen)
         .function("computeMVC", &App::computeMVC)
